@@ -1,4 +1,5 @@
 /*global jQuery, Handlebars, Router */
+// I guess this $ represents access to global namespace
 jQuery(function ($) {
 	'use strict';
 
@@ -9,7 +10,10 @@ jQuery(function ($) {
 	var ENTER_KEY = 13;
 	var ESCAPE_KEY = 27;
 
+	// guessing this is a general namespace for utilities
 	var util = {
+		// this uuid function seems to do some mathz
+		// in order to generate a uuid for something
 		uuid: function () {
 			/*jshint bitwise:false */
 			var i, random;
@@ -25,9 +29,12 @@ jQuery(function ($) {
 
 			return uuid;
 		},
+		// make stuff plural
 		pluralize: function (count, word) {
 			return count === 1 ? word : word + 's';
 		},
+		// store or retrieve data based on namespace
+		// key on some object called localStorage
 		store: function (namespace, data) {
 			if (arguments.length > 1) {
 				return localStorage.setItem(namespace, JSON.stringify(data));
@@ -40,17 +47,29 @@ jQuery(function ($) {
 
 	var App = {
 		init: function () {
+			// this probably retrieves todos-jquery JSON data
+			// from the localStorage
+			// get the application state from
+			// this localStorage thing
 			this.todos = util.store('todos-jquery');
+			// hmm seems like we are generating some html here
+			// proably process all the templates
+			// required to make the view
 			this.todoTemplate = Handlebars.compile($('#todo-template').html());
 			this.footerTemplate = Handlebars.compile($('#footer-template').html());
+			// link up events to their functions
 			this.bindEvents();
 
-			new Router({
-				'/:filter': function (filter) {
-					this.filter = filter;
-					this.render();
-				}.bind(this)
-			}).init('/all');
+			// bind a url id, in this case /:filter
+			// and route it to a function
+			new Router(
+				{
+					'/:filter': function (filter) {
+							this.filter = filter;
+							this.render();
+					            }.bind(this)
+				}
+			).init('/all');
 		},
 		bindEvents: function () {
 			$('#new-todo').on('keyup', this.create.bind(this));
@@ -84,6 +103,9 @@ jQuery(function ($) {
 
 			$('#footer').toggle(todoCount > 0).html(template);
 		},
+		// seem to be event handlers
+		// stuff that is called through the
+		// event binding system
 		toggleAll: function (e) {
 			var isChecked = $(e.target).prop('checked');
 
@@ -190,7 +212,9 @@ jQuery(function ($) {
 			this.todos.splice(this.indexFromEl(e.target), 1);
 			this.render();
 		}
+		// seems event handler functions end here
 	};
 
+	// the main entry point
 	App.init();
 });
