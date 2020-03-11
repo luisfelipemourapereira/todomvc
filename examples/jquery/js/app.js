@@ -106,6 +106,7 @@ jQuery(function ($) {
 		// seem to be event handlers
 		// stuff that is called through the
 		// event binding system
+		// EVENT HANDLER FUNCTIONS START HERE ASSHOLE
 		toggleAll: function (e) {
 			var isChecked = $(e.target).prop('checked');
 
